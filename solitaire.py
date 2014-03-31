@@ -10,10 +10,6 @@ import pygame, sys
 # Controller
 #
 
-
-Log = []
-
-
 def animate( dlist, dXY, slist, index, sXY):
     global Adest, Log
 
@@ -60,11 +56,10 @@ def undo():
         pass
 
 
-
-
 if __name__ == "__main__":
     Auto = False
     Victory = False
+    Log = []
 
     # init graphics environment
     view.init()
@@ -129,10 +124,10 @@ if __name__ == "__main__":
                     Adest.extend( step[0])
                 else: # single card append
                     Adest.append( step[0])
-                # only now update the view
-                view.display()
                 # and record the move done
                 model.countSteps += 1
+                # only now update the view
+                view.display()
 
 
         # victory?
@@ -249,21 +244,22 @@ if __name__ == "__main__":
 
             elif touch[0] == "basket":
                 card =  model.getBasketTip()
-                # try to move the card automatically to a top
-                top = model.matchTop( card)
-                if top >= 0:
-                    animate( model.tops[ top], # dest list
-                             view.topXY[ top], # dest coord
-                             model.basket,-1,  # source list
-                             touch[2])         # source coords
-
-                else: # move to a tip
-                    row = model.matchRow( card)
-                    if row >= 0:
-                        animate( model.rows[ row], # destination list
-                                 view.tipXY[ row], # dest coordinates
+                if card:
+                    # try to move the card automatically to a top
+                    top = model.matchTop( card)
+                    if top >= 0:
+                        animate( model.tops[ top], # dest list
+                                 view.topXY[ top], # dest coord
                                  model.basket,-1,  # source list
-                                 touch[2])         # source coordinates
+                                 touch[2])         # source coords
+
+                    else: # move to a tip
+                        row = model.matchRow( card)
+                        if row >= 0:
+                            animate( model.rows[ row], # destination list
+                                     view.tipXY[ row], # dest coordinates
+                                     model.basket,-1,  # source list
+                                     touch[2])         # source coordinates
 
             elif touch[0] == "button":
                 if   touch[ 1] == 0:  # undo
@@ -286,7 +282,8 @@ if __name__ == "__main__":
             view.display()
             # check if auto can be activated
             if not Auto:
-                Auto = ( model.countHidden() < 1)
+                Auto = (( model.countHidden() < 1) and 
+                            (not model.stack) and (not model.basket))
 
 
         # refresh
