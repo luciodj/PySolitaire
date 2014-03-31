@@ -112,7 +112,7 @@ def printTopCardBack( x, y):
 def display( ):
     # displays current game board
     # creates a list of rects for touch and animate
-    global RectList, topXY, tipXY, countSteps
+    global RectList, topXY, tipXY
 
     RectList = []
     topXY = []
@@ -156,7 +156,7 @@ def display( ):
 
     # 4. print the 7 rows
     for i in xrange( 7):
-        x = rows_left +(6-i)*( card_w +rows_space)
+        x = rows_left + i * ( card_w +rows_space)
         count = 0
         y = rows_y
         # in case row is empty

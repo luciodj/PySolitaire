@@ -61,9 +61,9 @@ def shuffle():
 def deal():
     # distribute as a diagonal
     for j in xrange( 7):
-        hidden[j] = 6-j
+        hidden[j] = j
         for i in xrange( 7-j):
-            rows[ i].append( stack.pop())
+            rows[ 6-i].append( stack.pop())
 
 
 # testing deal, to verify special termination conditions and auto mode
@@ -121,7 +121,7 @@ def checkHidden( source):
     length = len( rows[ source])
     # if the last card in a row is hidden
     if length>0 and hidden[ source] > length-1:
-        hidden[ source] = len( rows[ source])-1     # uncover it
+        hidden[ source] = length-1     # uncover it
         #print "source %d, hidden %d, len %d" % (source, hidden[source], len(rows[source]))
 
 
@@ -131,8 +131,10 @@ def countHidden():
     count = sum( hidden)
 
     # including those in the basket
-    count += len( stack) + len( basket) -1
-    return count
+    if basket:
+        return count + len( stack) + len( basket) -1
+    else:
+        return count + len( stack)
 
 
 def checkFinished():
