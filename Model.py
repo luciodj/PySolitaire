@@ -122,8 +122,14 @@ def checkHidden( source):
     # if the last card in a row is hidden
     if length>0 and hidden[ source] > length-1:
         hidden[ source] = length-1     # uncover it
+        return True
         #print "source %d, hidden %d, len %d" % (source, hidden[source], len(rows[source]))
+    else:
+        return False
 
+
+def rowHide( row):
+    hidden[ row] += 1
 
 
 def countHidden():
@@ -178,17 +184,44 @@ def matchTop( card):
 # refill the stack from the basket
 def refillStack():
     global stack, basket
+    stack = basket[:]
+    stack.reverse()
+    basket = []
 
-    # if basket is empty
-    if not basket:
-        return False    # failed
 
-    else:
-        stack = basket[:]
-        stack.reverse()
-        basket = []
-        return True     # success
+# undo refill the stack from the basket
+def unrefillStack():
+    global stack, basket
+    basket = stack[:]
+    basket.reverse()
+    stack = []
 
+
+def moveTo( dest, index, card):
+    if dest == 't':     #top
+        tops[ index].append( card)
+    elif dest == 'r':   #row
+        rows[ index].append( card)
+    elif dest == 'b':   #bascket
+        basket.append( card)
+    elif dest == 's':   #stack
+        stack.append( card)
+    
+
+def getCards( source, index, len):
+    if source == 't':     #top
+        slist = tops[ index]
+    elif source == 'r':   #row
+        slist= rows[ index]
+    elif source == 'b':   #bascket
+        slist = basket
+    elif source == 's':   #stack
+        slist = stack
+
+    cards = []
+    for i in xrange(len):
+        cards.append( slist.pop())
+    return cards
 
 
 def getTop( top):
@@ -199,7 +232,6 @@ def getTop( top):
 
 
 def getBasketTip():
-    global basket
     if basket:
         return basket[-1]
     else:

@@ -27,11 +27,11 @@ tops_left = ( XMax-(4*card_w)-(4*tops_space))/2
 tops_y = 10
 rows_space = 5
 rows_left = 10
-rows_y = tops_y +card_h + rows_space
-stack_x = XMax -card_w -tops_space
+rows_y = tops_y + card_h + 2*rows_space
+stack_x = XMax - card_w - tops_space
 stack_y = tops_y
 basket_x = stack_x
-basket_y = tops_y +card_h +2*rows_space
+basket_y = rows_y
 
 _screen = None
 _clock = None
@@ -168,7 +168,8 @@ def display( ):
             for card in rows[i]:
                 if hidden[i] > count:
                     # show back of card
-                    printTopCardBack( x, y)
+                    #printTopCardBack( x, y)
+                    printCardBack( x, y)
                     y += backtop_h
                 else: #visible
                     if card == getTip( i):
